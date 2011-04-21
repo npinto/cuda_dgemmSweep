@@ -7,18 +7,18 @@ CUDACC=nvcc
 
 CUDA_INCLUDES := -I. -I${CUDA_INSTALL_PATH}/include 
 CUDALIB := -L${CUDA_INSTALL_PATH}/lib64 -lcuda  -lcudart -lcublas
-CFLAGS= -arch sm_13 -DSM_13 -O3
-CFLAGS_SM20= -arch sm_20 -DSM_20 -O3
+CFLAGS= -O3
+CFLAGS_SM13= -arch sm_13 -DSM_13 -O3
 
 default: ${TARGET}
-all: cuda_dgemmSweep cuda_dgemmSweep_sm20
+all: cuda_sgemmSweep cuda_dgemmSweep
 
-cuda_dgemmSweep: dgemmSweep.cu
+cuda_sgemmSweep: sgemmSweep.cu
 	${CUDACC} ${CFLAGS} -o $@ $^ ${CUDALIB}
 
-cuda_dgemmSweep_sm20: dgemmSweep.cu
-	${CUDACC} ${CFLAGS_SM20} -o $@ $^ ${CUDALIB}
+cuda_dgemmSweep: dgemmSweep.cu
+	${CUDACC} ${CFLAGS_SM13} -o $@ $^ ${CUDALIB}
 
 clean:
 	rm -vf ./cuda_dgemmSweep
-	rm -vf ./cuda_dgemmSweep_sm20
+	rm -vf ./cuda_sgemmSweep
